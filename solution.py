@@ -1,6 +1,9 @@
 import numpy as np
+banknote = np.genfromtxt('data_banknote_authentication.txt', delimiter=',')
 
 ######## DO NOT MODIFY THIS FUNCTION ########
+
+
 def draw_rand_label(x, label_list):
     seed = abs(np.sum(x))
     while seed < 1:
@@ -14,16 +17,22 @@ def draw_rand_label(x, label_list):
 class Q1:
 
     def feature_means(self, banknote):
-        pass
+        without_label = np.delete(banknote, 4, axis=1)
+        return np.mean(without_label, axis=0)
 
     def covariance_matrix(self, banknote):
-        pass
+        without_label = np.delete(banknote, 4, axis=1)
+        return np.cov(without_label, rowvar=False)
 
     def feature_means_class_1(self, banknote):
-        pass
+        arr = np.delete(banknote, np.where(banknote == 0)[0], axis=0)
+        without_label = np.delete(arr, 4, axis=1)
+        return np.mean(without_label, axis=0)
 
     def covariance_matrix_class_1(self, banknote):
-        pass
+        arr = np.delete(banknote, np.where(banknote == 0)[0], axis=0)
+        without_label = np.delete(arr, 4, axis=1)
+        return np.cov(without_label, rowvar=False)
 
 
 class HardParzen:
@@ -40,7 +49,7 @@ class HardParzen:
 
 class SoftRBFParzen:
     def __init__(self, sigma):
-        self.sigma  = sigma
+        self.sigma = sigma
 
     def train(self, train_inputs, train_labels):
         # self.label_list = np.unique(train_labels)
