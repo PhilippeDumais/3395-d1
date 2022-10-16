@@ -49,7 +49,7 @@ class HardParzen:
         counts = np.ones((test_data_len, len(self.label_list)))
         majority_class = np.zeros(test_data_len)
         for (i, ex) in enumerate(test_data):
-            distances = np.sqrt(np.sum((ex - self.train_inputs) ** 2), axis=1)
+            distances = np.sqrt(np.sum((ex - self.train_inputs) ** 2, axis=1))
             r = self.h
             indexes_in_h = np.array(
                 [k for k in range(distances) if distances[k] <= r])
