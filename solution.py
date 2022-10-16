@@ -40,12 +40,26 @@ class HardParzen:
         self.h = h
 
     def train(self, train_inputs, train_labels):
-        # self.label_list = np.unique(train_labels)
-        pass
+        self.label_list = np.unique(train_labels)
+        self.train_inputs = train_inputs
+        self.train_labels = train_labels
 
     def compute_predictions(self, test_data):
-        pass
-
+        test_data_len = test_data.shape[0]
+        counts = np.ones((test_data_len, len(self.label_list)))
+        majority_class = np.zeros(test_data_len)
+        for (i, ex) in enumerate(test_data):
+            distances = np.sqrt(np.sum((ex - self.train_inputs) ** 2), axis=1)
+            r = self.h
+            indexes_in_h = np.array(
+                [k for k in range(distances) if distances[k] <= r])
+            if len(indexes_in_h) == 0:
+                return draw_rand_label(ex, [0, 1])
+            else:
+                for j in indexes_in_h:
+                    counts[i, self.train_labels[j] - 1] += 1
+            majority_class[i] = np.argmax(counts[i, :])+1
+        return majority_class
 
 class SoftRBFParzen:
     def __init__(self, sigma):
