@@ -56,12 +56,12 @@ class HardParzen:
             indices_in_h = np.array(
                 [k for k in range(len(distances)) if distances[k] <= r])
             if len(indices_in_h) == 0:
-                rand = draw_rand_label(ex, [1, 2])
+                rand = draw_rand_label(ex, self.label_list)
                 majority_class[i] = rand
             else:
                 for j in indices_in_h:
-                    counts[i, int(self.train_labels[j]) - 1] += 1
-            majority_class[i] = np.argmax(counts[i, :])+1
+                    counts[i, int(self.train_labels[j])-1] += 1
+                majority_class[i] = np.argmax(counts[i, :])
         return majority_class
 
 
