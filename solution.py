@@ -66,16 +66,34 @@ class SoftRBFParzen:
         self.sigma = sigma
 
     def train(self, train_inputs, train_labels):
-        # self.label_list = np.unique(train_labels)
-        pass
+        self.train_labels = train_labels
+        self.train_inputs = train_inputs
+        self.label_list = np.unique(train_labels)
 
     def compute_predictions(self, test_data):
         pass
 
 
 def split_dataset(banknote):
-    pass
+    arr = np.arange(banknote.shape[0])
+    train_indexes = arr[(arr % 5 == 0) | (arr % 5 == 1) | (arr % 5 == 2)]
+    val_indexes = arr[arr % 5 == 3]
+    test_indexes = arr[arr % 5 == 4]
+    train = []
+    val = []
+    test = []
+    for i, row in enumerate(banknote):
+        if i in train_indexes:
+            train.append(row)
+        if i in val_indexes:
+            val.append(row)
+        if i in test_indexes:
+            test.append(row)
 
+    train_set = np.stack(train, axis=0)
+    val_set = np.stack(val, axis=0)
+    test_set = np.stack(test, axis=0)
+    return (train_set, val_set, test_set)
 
 class ErrorRate:
     def __init__(self, x_train, y_train, x_val, y_val):
@@ -97,3 +115,6 @@ def get_test_errors(banknote):
 
 def random_projections(X, A):
     pass
+
+
+split_dataset(banknote)
