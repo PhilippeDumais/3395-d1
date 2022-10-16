@@ -1,2 +1,2 @@
-# 3395-d2
-Repo pour le devoir 2 du cours IFT 3395
+# 3395-d1
+Repo pour le devoir 1 du cours IFT 3395
