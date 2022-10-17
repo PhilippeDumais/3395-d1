@@ -48,26 +48,20 @@ class HardParzen:
         test_data_len = test_data.shape[0]
         counts = np.ones((test_data_len, len(self.label_list)))
         majority_class = np.zeros(test_data_len)
+        d = test_data.shape[1]
+        r = self.h
         for (i, ex) in enumerate(test_data):
             distances = np.sqrt(
-                np.sum((ex[:4] - self.train_inputs) ** 2, axis=1))
-            r = self.h
+                np.sum((ex[:d-1] - self.train_inputs) ** 2, axis=1))
             indices_in_h = []
             indices_in_h = np.array(
                 [k for k in range(len(distances)) if distances[k] <= r])
             if len(indices_in_h) == 0:
                 rand = draw_rand_label(ex, self.label_list)
-                # print("Random draw for index {index}: ".format(
-                # index = i), rand, "\n")
                 majority_class[i] = rand
             else:
                 for j in indices_in_h:
-                    # print("----------------------\n" + "\nIndex of test point: " + str(i) + "\nIndex of point in radius {radius}: ".format(radius=str(r)) + str(
-                    #     j) + "\nTest point: " + str(ex[:4]) + "\nPoint in radius: " + str(self.train_inputs[j]) + "\nTrain label value for point in radius: " + str(self.train_labels[j]) + "\n")
                     counts[i, int(self.train_labels[j])] += 1
-                # print("Total counts row for index {index}: ".format(
-                #     index=i), counts[i, :])
-                # print("Classifier prediction: ", np.argmax(counts[i, :]), "\n")
                 majority_class[i] = np.argmax(counts[i, :])
         return majority_class
 
@@ -82,7 +76,20 @@ class SoftRBFParzen:
         self.label_list = np.unique(train_labels)
 
     def compute_predictions(self, test_data):
-        pass
+        test_data_len = test_data.shape[0]
+        counts = np.zeros((test_data_len, len(self.label_list)))
+        majority_class = np.zeros(test_data_len)
+        s = self.sigma
+        d = test_data.shape[1]
+        for (i, ex) in enumerate(test_data):
+            weights = (1/(((2*np.pi)**(d/2))*s**d))**(-0.5 *
+                                                      (np.linalg.norm(ex[:d-1]-self.train_inputs, axis=1)/s**2))
+            for k in range(self.train_inputs.shape[0]):
+                counts[i, int(self.train_labels[k])] += weights[k]
+            majority_class[i] = np.argmax(counts[i, :])
+        return majority_class
+
+
 
 
 def split_dataset(banknote):
@@ -137,8 +144,12 @@ def test_predictions():
     labels = train[:, [-1]]
     hard = HardParzen(10)
     hard.train(inputs, labels)
-    hard.compute_predictions(test)
+    # hard.compute_predictions(test)
     # print(hard.compute_predictions(test))
+    soft = SoftRBFParzen(15)
+    soft.train(inputs, labels)
+    # soft.compute_predictions(test)
+    print(soft.compute_predictions(test))
 
 
-# test_predictions()
+test_predictions()
