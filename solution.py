@@ -57,10 +57,17 @@ class HardParzen:
                 [k for k in range(len(distances)) if distances[k] <= r])
             if len(indices_in_h) == 0:
                 rand = draw_rand_label(ex, self.label_list)
+                # print("Random draw for index {index}: ".format(
+                # index = i), rand, "\n")
                 majority_class[i] = rand
             else:
                 for j in indices_in_h:
-                    counts[i, int(self.train_labels[j])-1] += 1
+                    # print("----------------------\n" + "\nIndex of test point: " + str(i) + "\nIndex of point in radius {radius}: ".format(radius=str(r)) + str(
+                    #     j) + "\nTest point: " + str(ex[:4]) + "\nPoint in radius: " + str(self.train_inputs[j]) + "\nTrain label value for point in radius: " + str(self.train_labels[j]) + "\n")
+                    counts[i, int(self.train_labels[j])] += 1
+                # print("Total counts row for index {index}: ".format(
+                #     index=i), counts[i, :])
+                # print("Classifier prediction: ", np.argmax(counts[i, :]), "\n")
                 majority_class[i] = np.argmax(counts[i, :])
         return majority_class
 
@@ -128,9 +135,10 @@ def test_predictions():
     test = sets[2]
     inputs = train[:, :4]
     labels = train[:, [-1]]
-    hard = HardParzen(1.0)
+    hard = HardParzen(10)
     hard.train(inputs, labels)
-    print(hard.compute_predictions(test))
+    hard.compute_predictions(test)
+    # print(hard.compute_predictions(test))
 
 
-test_predictions()
+# test_predictions()
