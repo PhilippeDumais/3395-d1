@@ -152,4 +152,4 @@ def test_predictions():
     print(soft.compute_predictions(test))
 
 
-test_predictions()
+# test_predictions()
