@@ -82,7 +82,7 @@ class SoftRBFParzen:
         s = self.sigma
         d = self.train_inputs.shape[1]
         base = 1/(s*np.sqrt(2*np.pi))
-        print(base)
+        # print(base)
         for (i, ex) in enumerate(test_data):
             distances = np.sqrt(
                 np.sum((ex[:d] - self.train_inputs) ** 2, axis=1))
