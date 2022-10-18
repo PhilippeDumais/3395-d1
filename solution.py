@@ -82,8 +82,9 @@ class SoftRBFParzen:
         s = self.sigma
         d = 5
         for (i, ex) in enumerate(test_data):
-            weights = (1/(((2*np.pi)**(d/2))*s**d))**(-0.5 *
-                                                      (np.linalg.norm(ex[:d-1]-self.train_inputs, axis=1)/s**2))
+            distances = np.sqrt(
+                np.sum((ex[:d-1] - self.train_inputs) ** 2, axis=1))
+            weights = (1/(s*np.sqrt(2*np.pi)))**-((distances**2)/(2*(s**2)))
             for k in range(self.train_inputs.shape[0]):
                 counts[i, int(self.train_labels[k])] += weights[k]
             majority_class[i] = np.argmax(counts[i, :])
@@ -146,7 +147,7 @@ def test_predictions():
     hard.train(inputs, labels)
     # hard.compute_predictions(test)
     # print(hard.compute_predictions(test))
-    soft = SoftRBFParzen(15)
+    soft = SoftRBFParzen(1)
     soft.train(inputs, labels)
     # soft.compute_predictions(test)
     print(soft.compute_predictions(test))
