@@ -83,12 +83,11 @@ class SoftRBFParzen:
         s = self.sigma
         d = self.train_inputs.shape[1]
         base = 1/(s*np.sqrt(2*np.pi))
-        # print(base)
         for (i, ex) in enumerate(test_data):
             distances = np.sqrt(
                 np.sum((ex[:d] - self.train_inputs) ** 2, axis=1))
             exponent = np.square(distances)/(2*np.square(s))
-            e = np.e**exponent
+            e = np.e**-exponent
             weights = base*e
             for k in range(self.train_inputs.shape[0]):
                 counts[i, int(self.train_labels[k])] += weights[k]
@@ -153,7 +152,7 @@ def test_predictions():
     hard.train(inputs, labels)
     hard.compute_predictions(test)
     # print(hard.compute_predictions(test))
-    soft = SoftRBFParzen(1)
+    soft = SoftRBFParzen(10)
     soft.train(inputs, labels)
     # soft.compute_predictions(test)
     print(soft.compute_predictions(test))
