@@ -48,11 +48,11 @@ class HardParzen:
         test_data_len = test_data.shape[0]
         counts = np.ones((test_data_len, len(self.label_list)))
         majority_class = np.zeros(test_data_len)
-        d = 5
+        d = test_data.shape[1] - 1
         r = self.h
         for (i, ex) in enumerate(test_data):
             distances = np.sqrt(
-                np.sum((ex[:d-1] - self.train_inputs) ** 2, axis=1))
+                np.sum((ex[:d] - self.train_inputs) ** 2, axis=1))
             indices_in_h = []
             indices_in_h = np.array(
                 [k for k in range(len(distances)) if distances[k] <= r])
@@ -80,10 +80,10 @@ class SoftRBFParzen:
         counts = np.zeros((test_data_len, len(self.label_list)))
         majority_class = np.zeros(test_data_len)
         s = self.sigma
-        d = 5
+        d = test_data.shape[1] - 1
         for (i, ex) in enumerate(test_data):
             distances = np.sqrt(
-                np.sum((ex[:d-1] - self.train_inputs) ** 2, axis=1))
+                np.sum((ex[:d] - self.train_inputs) ** 2, axis=1))
             weights = (1/(s*np.sqrt(2*np.pi)))**-((distances**2)/(2*(s**2)))
             for k in range(self.train_inputs.shape[0]):
                 counts[i, int(self.train_labels[k])] += weights[k]
@@ -145,8 +145,8 @@ def test_predictions():
     labels = train[:, [-1]]
     hard = HardParzen(10)
     hard.train(inputs, labels)
-    # hard.compute_predictions(test)
-    # print(hard.compute_predictions(test))
+    hard.compute_predictions(test)
+    print(hard.compute_predictions(test))
     soft = SoftRBFParzen(1)
     soft.train(inputs, labels)
     # soft.compute_predictions(test)
