@@ -48,7 +48,8 @@ class HardParzen:
         test_data_len = test_data.shape[0]
         counts = np.ones((test_data_len, len(self.label_list)))
         majority_class = np.zeros(test_data_len)
-        d = test_data.shape[1] - 1
+        print(self.train_inputs.shape[1])
+        d = self.train_inputs.shape[1]
         r = self.h
         for (i, ex) in enumerate(test_data):
             distances = np.sqrt(
@@ -80,7 +81,7 @@ class SoftRBFParzen:
         counts = np.zeros((test_data_len, len(self.label_list)))
         majority_class = np.zeros(test_data_len)
         s = self.sigma
-        d = test_data.shape[1] - 1
+        d = self.train_inputs.shape[1]
         for (i, ex) in enumerate(test_data):
             distances = np.sqrt(
                 np.sum((ex[:d] - self.train_inputs) ** 2, axis=1))
