@@ -128,10 +128,27 @@ class ErrorRate:
         self.y_val = y_val
 
     def hard_parzen(self, h):
-        pass
+        hard = HardParzen(h)
+        hard.train(self.x_train, self.y_train)
+        predicted = hard.compute_predictions(self.x_val)
+        error_counter = 0
+        for i in range(len(predicted)):
+            if predicted[i] != self.y_val[i]:
+                error_counter += 1
+        error_percent = 100*(error_counter/len(predicted))
+        return error_percent
+
 
     def soft_parzen(self, sigma):
-        pass
+        soft = SoftRBFParzen(sigma)
+        soft.train(self.x_train, self.y_train)
+        predicted = soft.compute_predictions(self.x_val)
+        error_counter = 0
+        for i in range(len(predicted)):
+            if predicted[i] != self.y_val[i]:
+                error_counter += 1
+        error_percent = 100*(error_counter/len(predicted))
+        return error_percent
 
 
 def get_test_errors(banknote):
@@ -145,17 +162,23 @@ def random_projections(X, A):
 def test_predictions():
     sets = split_dataset(banknote)
     train = sets[0]
+    val = sets[1]
+    val_inputs = val[:, :-1]
+    val_labels = val[:, -1].astype('int32')
     test = sets[2]
-    inputs = train[:, :4]
-    labels = train[:, [-1]]
+    inputs = train[:, :-1]
+    labels = train[:, -1]
     hard = HardParzen(10)
     hard.train(inputs, labels)
-    hard.compute_predictions(test)
+    # hard.compute_predictions(test)
     # print(hard.compute_predictions(test))
     soft = SoftRBFParzen(10)
     soft.train(inputs, labels)
     # soft.compute_predictions(test)
-    print(soft.compute_predictions(test))
+    # print(soft.compute_predictions(test))
+    err = ErrorRate(inputs, labels, val_inputs, val_labels)
+    print(err.hard_parzen(1))
+    print(err.soft_parzen(10))
 
 
 test_predictions()
