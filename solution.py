@@ -152,7 +152,23 @@ class ErrorRate:
 
 
 def get_test_errors(banknote):
-    pass
+    sets = split_dataset(banknote)
+    train_inputs = sets[0][:, :-1]
+    train_labels = sets[0][:, -1]
+    val_inputs = sets[1][:, :-1]
+    val_labels = sets[1][:, -1]
+    test_inputs = sets[2][:, :-1]
+    test_labels = sets[2][:, -1]
+    err = ErrorRate(train_inputs, train_labels, val_inputs, val_labels)
+    hard_errors = []
+    soft_errors = []
+    list_of_values = [0.01, 0.1, 0.2, 0.3, 0.4, 0.5, 1.0, 3.0, 10.0, 20.0]
+    for value in list_of_values:
+        hard_errors.append(err.hard_parzen(value))
+        soft_errors.append(err.soft_parzen(value))
+    hstar = list_of_values[np.argmin(hard_errors)]
+    sstar = list_of_values[np.argmin(soft_errors)]
+    return [err.hard_parzen(hstar), err.soft_parzen(sstar)]
 
 
 def random_projections(X, A):
@@ -177,8 +193,9 @@ def test_predictions():
     # soft.compute_predictions(test)
     # print(soft.compute_predictions(test))
     err = ErrorRate(inputs, labels, val_inputs, val_labels)
-    print(err.hard_parzen(1))
-    print(err.soft_parzen(10))
+    # print(err.hard_parzen(1))
+    # print(err.soft_parzen(10))
+    print(get_test_errors(banknote))
 
 
-test_predictions()
+# test_predictions()
