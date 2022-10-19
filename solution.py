@@ -135,7 +135,7 @@ class ErrorRate:
         for i in range(len(predicted)):
             if predicted[i] != self.y_val[i]:
                 error_counter += 1
-        error_percent = 100*(error_counter/len(predicted))
+        error_percent = error_counter/len(predicted)
         return error_percent
 
 
@@ -147,7 +147,7 @@ class ErrorRate:
         for i in range(len(predicted)):
             if predicted[i] != self.y_val[i]:
                 error_counter += 1
-        error_percent = 100*(error_counter/len(predicted))
+        error_percent = error_counter/len(predicted)
         return error_percent
 
 
