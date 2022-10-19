@@ -168,7 +168,8 @@ def get_test_errors(banknote):
         soft_errors.append(err.soft_parzen(value))
     hstar = list_of_values[np.argmin(hard_errors)]
     sstar = list_of_values[np.argmin(soft_errors)]
-    return [err.hard_parzen(hstar), err.soft_parzen(sstar)]
+    test_err = ErrorRate(train_inputs, train_labels, test_inputs, test_labels)
+    return [test_err.hard_parzen(hstar), test_err.soft_parzen(sstar)]
 
 
 def random_projections(X, A):
@@ -198,4 +199,4 @@ def test_predictions():
     print(get_test_errors(banknote))
 
 
-# test_predictions()
+test_predictions()
