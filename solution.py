@@ -169,6 +169,7 @@ def get_test_errors(banknote):
         soft_errors.append(err.soft_parzen(value))
     hstar = list_of_values[np.argmin(hard_errors)]
     sstar = list_of_values[np.argmin(soft_errors)]
+    print("h*: ", hstar, "sigma*: ", sstar)
     test_err = ErrorRate(train_inputs, train_labels, test_inputs, test_labels)
     return [test_err.hard_parzen(hstar), test_err.soft_parzen(sstar)]
 
@@ -185,9 +186,9 @@ def create_graph(banknote):
     val_labels = sets[1][:, -1].astype('int32')
     err = ErrorRate(train_inputs, train_labels, val_inputs, val_labels)
     list_of_values = [0.01, 0.1, 0.2, 0.3, 0.4, 0.5, 1.0, 3.0, 10.0, 20.0]
-    plt.plot([0, 2, 4, 6, 8, 10, 12, 14, 16, 20], [100*err.hard_parzen(k)
+    plt.plot(list_of_values, [100*err.hard_parzen(k)
              for k in list_of_values], label='Hard Parzen', color="red")
-    plt.plot([0, 2, 4, 6, 8, 10, 12, 14, 16, 20], [100*err.soft_parzen(k)
+    plt.plot(list_of_values, [100*err.soft_parzen(k)
              for k in list_of_values], label='Soft Parzen', color="blue")
     plt.legend()
     plt.ylabel("Erreur de classification")
@@ -218,5 +219,5 @@ def test_predictions():
     print(get_test_errors(banknote))
 
 
-# test_predictions()
+test_predictions()
 create_graph(banknote)
