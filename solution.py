@@ -18,21 +18,21 @@ def draw_rand_label(x, label_list):
 class Q1:
 
     def feature_means(self, banknote):
-        without_label = np.delete(banknote, 4, axis=1)
+        without_label = banknote[:, :-1]
         return np.mean(without_label, axis=0)
 
     def covariance_matrix(self, banknote):
-        without_label = np.delete(banknote, 4, axis=1)
+        without_label = banknote[:, :-1]
         return np.cov(without_label, rowvar=False)
 
     def feature_means_class_1(self, banknote):
         arr = np.delete(banknote, np.where(banknote == 0)[0], axis=0)
-        without_label = np.delete(arr, 4, axis=1)
+        without_label = arr[:, :-1]
         return np.mean(without_label, axis=0)
 
     def covariance_matrix_class_1(self, banknote):
         arr = np.delete(banknote, np.where(banknote == 0)[0], axis=0)
-        without_label = np.delete(arr, 4, axis=1)
+        without_label = arr[:, :-1]
         return np.cov(without_label, rowvar=False)
 
 
