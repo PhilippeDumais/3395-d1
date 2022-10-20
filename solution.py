@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 banknote = np.genfromtxt('data_banknote_authentication.txt', delimiter=',')
 
 ######## DO NOT MODIFY THIS FUNCTION ########
@@ -176,6 +177,24 @@ def random_projections(X, A):
     pass
 
 
+def create_graph(banknote):
+    sets = split_dataset(banknote)
+    train_inputs = sets[0][:, :-1]
+    train_labels = sets[0][:, -1].astype('int32')
+    val_inputs = sets[1][:, :-1]
+    val_labels = sets[1][:, -1].astype('int32')
+    err = ErrorRate(train_inputs, train_labels, val_inputs, val_labels)
+    list_of_values = [0.01, 0.1, 0.2, 0.3, 0.4, 0.5, 1.0, 3.0, 10.0, 20.0]
+    plt.plot([0, 2, 4, 6, 8, 10, 12, 14, 16, 20], [100*err.hard_parzen(k)
+             for k in list_of_values], label='Hard Parzen', color="red")
+    plt.plot([0, 2, 4, 6, 8, 10, 12, 14, 16, 20], [100*err.soft_parzen(k)
+             for k in list_of_values], label='Soft Parzen', color="blue")
+    plt.legend()
+    plt.ylabel("Erreur de classification")
+    plt.xlabel("Valeurs de σ et h")
+    plt.show()
+
+
 def test_predictions():
     sets = split_dataset(banknote)
     train = sets[0]
@@ -199,4 +218,5 @@ def test_predictions():
     print(get_test_errors(banknote))
 
 
-test_predictions()
+# test_predictions()
+create_graph(banknote)
