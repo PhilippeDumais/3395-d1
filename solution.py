@@ -191,7 +191,7 @@ def create_graph(banknote):
     plt.plot(list_of_values, [100*err.soft_parzen(k)
              for k in list_of_values], label='Soft Parzen', color="blue")
     plt.legend()
-    plt.ylabel("Erreur de classification")
+    plt.ylabel("Erreur de classification (%)")
     plt.xlabel("Valeurs de σ et h")
     plt.show()
 
